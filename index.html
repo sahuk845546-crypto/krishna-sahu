@@ -3,22 +3,114 @@
 <head>
 <title>Krishna Fashion Hub</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-body{margin:0;font-family:Arial;background:#111;color:white}
-header{background:black;padding:20px;text-align:center;position:relative}
-.login-btn{position:absolute;left:20px;top:20px;color:white;text-decoration:none;background:#444;padding:6px 12px;border-radius:20px}
-.cart-icon{position:absolute;right:20px;top:20px;cursor:pointer}
-.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;padding:20px}
-.product{background:#222;padding:15px;border-radius:10px;text-align:center}
-.product img{width:100%;border-radius:10px}
-.price{color:#ffd700;font-weight:bold}
-.btn{background:green;padding:8px;border-radius:5px;margin-top:10px;cursor:pointer}
-#cart-panel{position:fixed;right:-320px;top:0;width:300px;height:100%;background:#000;padding:20px;transition:0.4s;overflow:auto}
-#cart-panel.active{right:0}
-.remove{color:red;cursor:pointer;font-size:12px}
-.checkout-btn{display:block;background:#25D366;padding:10px;text-align:center;border-radius:20px;text-decoration:none;color:white;margin-top:10px}
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#000000,#1a1a2e,#16213e);
+color:white
+}
+
+header{
+background:rgba(0,0,0,0.8);
+padding:20px;
+text-align:center;
+position:relative;
+backdrop-filter: blur(10px);
+}
+
+.login-btn{
+position:absolute;
+left:20px;
+top:20px;
+color:white;
+text-decoration:none;
+background:#444;
+padding:6px 12px;
+border-radius:20px
+}
+
+.cart-icon{
+position:absolute;
+right:20px;
+top:20px;
+cursor:pointer
+}
+
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+padding:20px
+}
+
+.product{
+background:rgba(255,255,255,0.05);
+padding:15px;
+border-radius:15px;
+text-align:center;
+box-shadow:0 0 15px rgba(0,0,0,0.5);
+transition:0.3s;
+}
+
+.product:hover{
+transform:translateY(-5px);
+}
+
+.product img{
+width:100%;
+border-radius:10px
+}
+
+.price{
+color:#ffd700;
+font-weight:bold
+}
+
+.btn{
+background:green;
+padding:8px;
+border-radius:5px;
+margin-top:10px;
+cursor:pointer
+}
+
+#cart-panel{
+position:fixed;
+right:-320px;
+top:0;
+width:300px;
+height:100%;
+background:#000;
+padding:20px;
+transition:0.4s;
+overflow:auto
+}
+
+#cart-panel.active{
+right:0
+}
+
+.remove{
+color:red;
+cursor:pointer;
+font-size:12px
+}
+
+.checkout-btn{
+display:block;
+background:#25D366;
+padding:10px;
+text-align:center;
+border-radius:20px;
+text-decoration:none;
+color:white;
+margin-top:10px
+}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -40,7 +132,7 @@ header{background:black;padding:20px;text-align:center;position:relative}
 <img src="https://i.ibb.co/NgMytxvq/dilzt.jpg">
 <h3>Gold Jhumka Earrings</h3>
 <p class="price">₹399</p>
-<div class="btn" onclick="addToCart('Gold Jhumka Earrings',799)">Add To Cart</div>
+<div class="btn" onclick="addToCart('Gold Jhumka Earrings',399)">Add To Cart</div>
 </div>
 
 <div class="product">
@@ -76,21 +168,29 @@ header{background:black;padding:20px;text-align:center;position:relative}
 
 <script>
 let cart=[];
+
+// LOGIN NAME GET FROM LOCAL STORAGE
+let username = localStorage.getItem("username");
+
 function toggleCart(){
 document.getElementById("cart-panel").classList.toggle("active");
 }
+
 function addToCart(name,price){
 cart.push({name,price});
 updateCart();
 }
+
 function removeItem(index){
 cart.splice(index,1);
 updateCart();
 }
+
 function updateCart(){
 let items=document.getElementById("cart-items");
 let total=0;
 items.innerHTML="";
+
 cart.forEach((item,index)=>{
 total+=item.price;
 items.innerHTML+=`
@@ -100,13 +200,22 @@ ${item.name} - ₹${item.price}
 </div>
 `;
 });
+
 document.getElementById("count").innerText=cart.length;
 document.getElementById("total").innerText=total;
 
-let message="Order Details:%0A";
+// WhatsApp Message
+let message="🛍️ Krishna Fashion Hub Order%0A";
+if(username){
+message+="👤 Name: "+username+"%0A";
+}
+message+="--------------------%0A";
+
 cart.forEach(item=>{
 message+=item.name+" - ₹"+item.price+"%0A";
 });
+
+message+="--------------------%0A";
 message+="Total: ₹"+total;
 
 document.getElementById("checkout").href=
