@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krishna Fashion Hub</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(-45deg,#1d2671,#c33764,#ff512f,#dd2476);
+    background-size:400% 400%;
+    animation:gradientBG 10s ease infinite;
+    color:white;
+}
+@keyframes gradientBG{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+header{
+    text-align:center;
+    padding:40px 20px;
+    position:relative;
+}
+header h1{font-size:38px;}
+.cart-icon{
+    position:absolute;
+    right:30px;
+    top:30px;
+    cursor:pointer;
+    font-weight:600;
+    background:rgba(0,0,0,0.4);
+    padding:8px 15px;
+    border-radius:30px;
+}
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:30px;
+    padding:40px;
+}
+
+.product{
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(15px);
+    border-radius:20px;
+    padding:20px;
+    transition:0.4s;
+    transform-style:preserve-3d;
+    box-shadow:0 20px 40px rgba(0,0,0,0.4);
+}
+
+.product img{
+    width:100%;
+    border-radius:15px;
+    margin-bottom:15px;
+}
+
+.badge{
+    background:linear-gradient(45deg,#ff416c,#ff4b2b);
+    padding:5px 12px;
+    border-radius:30px;
+    font-size:12px;
+    display:inline-block;
+    margin-bottom:10px;
+}
+
+.price{font-size:20px;font-weight:600;color:#ffd700;}
+.old-price{text-decoration:line-through;font-size:14px;margin-left:8px;opacity:0.7;}
+
+.btn{
+    display:inline-block;
+    margin-top:15px;
+    padding:10px 18px;
+    border-radius:30px;
+    background:linear-gradient(45deg,#00f260,#0575e6);
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+    cursor:pointer;
+}
+
+#cart-panel{
+    position:fixed;
+    right:-350px;
+    top:0;
+    width:300px;
+    height:100%;
+    background:#111;
+    padding:20px;
+    transition:0.4s;
+    overflow:auto;
+}
+
+#cart-panel.active{right:0;}
+
+.cart-item{
+    margin-bottom:10px;
+    border-bottom:1px solid #333;
+    padding-bottom:5px;
+}
+
+.remove{
+    color:red;
+    cursor:pointer;
+    font-size:12px;
+}
+
+.checkout-btn{
+    margin-top:15px;
+    display:block;
+    background:#25D366;
+    padding:10px;
+    text-align:center;
+    border-radius:20px;
+    text-decoration:none;
+    color:white;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Krishna Fashion Hub</h1>
+    <div class="cart-icon" onclick="toggleCart()">
+        🛒 Cart (<span id="cart-count">0</span>)
+    </div>
+</header>
+
+<section class="products">
+
+<div class="product">
+    <div class="badge">20% OFF</div>
+    <img src="https://i.ibb.co/z0VkQ3P/oats.jpg">
+    <h3>Healthy Oats</h3>
+    <p class="price">₹549 <span class="old-price">₹699</span></p>
+    <div class="btn" onclick="addToCart('Healthy Oats',549)">Add To Cart</div>
+</div>
+
+<div class="product">
+    <div class="badge">30% OFF</div>
+    <img src="https://i.ibb.co/LX5wzmgq/jewellery.jpg">
+    <h3>Necklace Set</h3>
+    <p class="price">₹499 <span class="old-price">₹699</span></p>
+    <div class="btn" onclick="addToCart('Necklace Set',499)">Add To Cart</div>
+</div>
+
+<div class="product">
+    <div class="badge">Best Seller</div>
+    <img src="https://i.ibb.co/mVnrdX47/creatine.jpg">
+    <h3>Creatine</h3>
+    <p class="price">₹999 <span class="old-price">₹1299</span></p>
+    <div class="btn" onclick="addToCart('Creatine',999)">Add To Cart</div>
+</div>
+
+</section>
+
+<div id="cart-panel">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <h3>Total: ₹<span id="total">0</span></h3>
+    <a id="checkout" class="checkout-btn" target="_blank">Order on WhatsApp</a>
+</div>
+
+<script>
+
+let cart=[];
+const cartCount=document.getElementById("cart-count");
+const cartItems=document.getElementById("cart-items");
+const totalDisplay=document.getElementById("total");
+
+function toggleCart(){
+    document.getElementById("cart-panel").classList.toggle("active");
+}
+
+function addToCart(name,price){
+    cart.push({name,price});
+    updateCart();
+}
+
+function removeItem(index){
+    cart.splice(index,1);
+    updateCart();
+}
+
+function updateCart(){
+    cartItems.innerHTML="";
+    let total=0;
+
+    cart.forEach((item,index)=>{
+        total+=item.price;
+        cartItems.innerHTML+=`
+            <div class="cart-item">
+                ${item.name} - ₹${item.price}
+                <div class="remove" onclick="removeItem(${index})">Remove</div>
+            </div>
+        `;
+    });
+
+    totalDisplay.innerText=total;
+    cartCount.innerText=cart.length;
+
+    let message="Order Details:%0A";
+    cart.forEach(item=>{
+        message+=`${item.name} - ₹${item.price}%0A`;
+    });
+    message+=`Total: ₹${total}`;
+
+    document.getElementById("checkout").href=
+    `https://wa.me/917898510840?text=${message}`;
+}
+
+// 3D Mouse Effect
+document.querySelectorAll(".product").forEach(card=>{
+    card.addEventListener("mousemove",(e)=>{
+        const rect=card.getBoundingClientRect();
+        const x=e.clientX-rect.left;
+        const y=e.clientY-rect.top;
+        const centerX=rect.width/2;
+        const centerY=rect.height/2;
+        const rotateX=(y-centerY)/20;
+        const rotateY=(centerX-x)/20;
+        card.style.transform=`rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+    });
+    card.addEventListener("mouseleave",()=>{
+        card.style.transform="rotateX(0) rotateY(0)";
+    });
+});
+
+</script>
+
+</body>
+</html>
