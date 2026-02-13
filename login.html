@@ -38,10 +38,16 @@ button{
 <h2>Login</h2>
 <input type="text" placeholder="Username">
 <input type="password" placeholder="Password">
-<button onclick="go()">Login</button>
+ <button onclick="login()">Login</button>
 </div>
-
 <script>
+function login(){
+let name=document.getElementById("name").value;
+localStorage.setItem("username",name);
+window.location.href="index.html";
+}
+</script>
+  
 function go(){
   window.location.href="index.html";
 }
