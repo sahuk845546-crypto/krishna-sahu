@@ -1,162 +1,118 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Krishna Fashion Hub</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{
-    font-family:'Poppins',sans-serif;
-    background:linear-gradient(-45deg,#1d2671,#c33764,#ff512f,#dd2476);
-    background-size:400% 400%;
-    animation:gradientBG 10s ease infinite;
-    color:white;
-}
-@keyframes gradientBG{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
-}
-
-header{
-    text-align:center;
-    padding:40px 20px;
-    position:relative;
-}
-header h1{font-size:38px;}
-
-.login-btn{
-    position:absolute;
-    left:30px;
-    top:30px;
-    background:linear-gradient(45deg,#f7971e,#ffd200);
-    padding:8px 15px;
-    border-radius:30px;
-    text-decoration:none;
-    color:black;
-    font-weight:600;
-}
-
-.cart-icon{
-    position:absolute;
-    right:30px;
-    top:30px;
-    cursor:pointer;
-    font-weight:600;
-    background:rgba(0,0,0,0.4);
-    padding:8px 15px;
-    border-radius:30px;
-}
-
-.products{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:30px;
-    padding:40px;
-}
-
-.product{
-    background:rgba(255,255,255,0.08);
-    backdrop-filter:blur(15px);
-    border-radius:20px;
-    padding:20px;
-    transition:0.4s;
-    box-shadow:0 20px 40px rgba(0,0,0,0.4);
-}
-
-.product img{
-    width:100%;
-    border-radius:15px;
-    margin-bottom:15px;
-}
-
-.badge{
-    background:linear-gradient(45deg,#ff416c,#ff4b2b);
-    padding:5px 12px;
-    border-radius:30px;
-    font-size:12px;
-    display:inline-block;
-    margin-bottom:10px;
-}
-
-.price{font-size:20px;font-weight:600;color:#ffd700;}
-.old-price{text-decoration:line-through;font-size:14px;margin-left:8px;opacity:0.7;}
-
-.btn{
-    display:inline-block;
-    margin-top:15px;
-    padding:10px 18px;
-    border-radius:30px;
-    background:linear-gradient(45deg,#00f260,#0575e6);
-    color:white;
-    text-decoration:none;
-    font-weight:600;
-    cursor:pointer;
-}
+body{margin:0;font-family:Arial;background:#111;color:white}
+header{background:black;padding:20px;text-align:center;position:relative}
+.login-btn{position:absolute;left:20px;top:20px;color:white;text-decoration:none;background:#444;padding:6px 12px;border-radius:20px}
+.cart-icon{position:absolute;right:20px;top:20px;cursor:pointer}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;padding:20px}
+.product{background:#222;padding:15px;border-radius:10px;text-align:center}
+.product img{width:100%;border-radius:10px}
+.price{color:#ffd700;font-weight:bold}
+.btn{background:green;padding:8px;border-radius:5px;margin-top:10px;cursor:pointer}
+#cart-panel{position:fixed;right:-320px;top:0;width:300px;height:100%;background:#000;padding:20px;transition:0.4s;overflow:auto}
+#cart-panel.active{right:0}
+.remove{color:red;cursor:pointer;font-size:12px}
+.checkout-btn{display:block;background:#25D366;padding:10px;text-align:center;border-radius:20px;text-decoration:none;color:white;margin-top:10px}
 </style>
 </head>
-
 <body>
 
 <header>
-    <h1>Krishna Fashion Hub</h1>
-    <a href="login.html" class="login-btn">Login</a>
-    <div class="cart-icon">
-        🛒 Cart (<span id="cart-count">0</span>)
-    </div>
+<h2>Krishna Fashion Hub</h2>
+<a href="login.html" class="login-btn">Login</a>
+<div class="cart-icon" onclick="toggleCart()">🛒 Cart (<span id="count">0</span>)</div>
 </header>
 
-<section class="products">
+<div class="products">
 
-<!-- Product 1 -->
 <div class="product">
-    <div class="badge">20% OFF</div>
-    <img src="https://i.ibb.co/z0VkQ3P/oats.jpg">
-    <h3>Healthy Oats</h3>
-    <p class="price">₹549 <span class="old-price">₹699</span></p>
-    <div class="btn">Add To Cart</div>
+<img src="https://i.ibb.co/z0VkQ3P/oats.jpg">
+<h3>Healthy Oats</h3>
+<p class="price">₹549</p>
+<div class="btn" onclick="addToCart('Healthy Oats',549)">Add To Cart</div>
 </div>
 
-<!-- Product 2 -->
 <div class="product">
-    <img src="https://i.ibb.co/NgMytxvq/dilzt.jpg">
-    <h3>Gold Jhumka Earrings</h3>
-    <p class="price">₹799</p>
-    <div class="btn">Add To Cart</div>
+<img src="https://i.ibb.co/NgMytxvq/dilzt.jpg">
+<h3>Gold Jhumka Earrings</h3>
+<p class="price">₹399</p>
+<div class="btn" onclick="addToCart('Gold Jhumka Earrings',799)">Add To Cart</div>
 </div>
 
-<!-- Product 3 -->
 <div class="product">
-    <div class="badge">🔥 New Arrival</div>
-    <img src="https://i.ibb.co/ywTnHz3/file-00000000e1b07209affe10d737e32943.png">
-    <h3>Gold Kada Traditional</h3>
-    <p class="price">₹299 <span class="old-price">₹1299</span></p>
-    <div class="btn">Add To Cart</div>
+<img src="https://i.ibb.co/ywTnHz3/file-00000000e1b07209affe10d737e32943.png">
+<h3>Gold Kada Traditional</h3>
+<p class="price">₹299</p>
+<div class="btn" onclick="addToCart('Gold Kada Traditional',299)">Add To Cart</div>
 </div>
 
-<!-- Product 4 -->
 <div class="product">
-    <div class="badge">⭐ Best Seller</div>
-    <img src="https://i.ibb.co/VYDrf3dT/db42y.jpg">
-    <h3>Women Jewelry Bracelet</h3>
-    <p class="price">₹359 <span class="old-price">₹1099</span></p>
-    <div class="btn">Add To Cart</div>
+<img src="https://i.ibb.co/VYDrf3dT/db42y.jpg">
+<h3>Women Jewelry Bracelet</h3>
+<p class="price">₹359</p>
+<div class="btn" onclick="addToCart('Women Jewelry Bracelet',359)">Add To Cart</div>
 </div>
 
-<!-- Product 5 -->
 <div class="product">
-    <div class="badge">✨ Trending</div>
-    <img src="https://i.ibb.co/6RzFrmPY/Chat-GPT-Image-Feb-13-2026-12-49-12-PM.png">
-    <h3>Mangalsutra</h3>
-    <p class="price">₹499 <span class="old-price">₹1199</span></p>
-    <div class="btn">Add To Cart</div>
+<img src="https://i.ibb.co/6RzFrmPY/Chat-GPT-Image-Feb-13-2026-12-49-12-PM.png">
+<h3>Mangalsutra</h3>
+<p class="price">₹499</p>
+<div class="btn" onclick="addToCart('Mangalsutra',499)">Add To Cart</div>
 </div>
 
-</section>
+</div>
+
+<!-- CART PANEL -->
+<div id="cart-panel">
+<h2>Your Cart</h2>
+<div id="cart-items"></div>
+<h3>Total: ₹<span id="total">0</span></h3>
+<a id="checkout" class="checkout-btn" target="_blank">Order on WhatsApp</a>
+</div>
+
+<script>
+let cart=[];
+function toggleCart(){
+document.getElementById("cart-panel").classList.toggle("active");
+}
+function addToCart(name,price){
+cart.push({name,price});
+updateCart();
+}
+function removeItem(index){
+cart.splice(index,1);
+updateCart();
+}
+function updateCart(){
+let items=document.getElementById("cart-items");
+let total=0;
+items.innerHTML="";
+cart.forEach((item,index)=>{
+total+=item.price;
+items.innerHTML+=`
+<div>
+${item.name} - ₹${item.price}
+<div class="remove" onclick="removeItem(${index})">Remove</div>
+</div>
+`;
+});
+document.getElementById("count").innerText=cart.length;
+document.getElementById("total").innerText=total;
+
+let message="Order Details:%0A";
+cart.forEach(item=>{
+message+=item.name+" - ₹"+item.price+"%0A";
+});
+message+="Total: ₹"+total;
+
+document.getElementById("checkout").href=
+"https://wa.me/917898510840?text="+message;
+}
+</script>
 
 </body>
 </html>
